@@ -177,7 +177,7 @@ while True:
             print(f"- {i} - {ips[i]}")
             sleep(0.5)
         print("The network scanning process is completed.")
-    elif command.startswith("HackNet.exe"):
+    elif command == "HackNet.exe":
         print("- HackNet.exe <ip>\nThis software will help you connect to closed server by it`s ip address.")
     elif command.startswith("HackNet.exe "):
         _, ip = command.split(" ", 1)
