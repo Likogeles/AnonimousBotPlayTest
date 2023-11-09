@@ -151,7 +151,7 @@ current_directory = root_directory
 while True:
     current_path = "/".join(current_directory.path())
 
-    command = input(f"{current_path}/: ")
+    command = input(f"\n{current_path}/: ")
 
     if command.startswith("cd "):
         _, path = command.split(" ", 1)
@@ -178,7 +178,7 @@ while True:
             sleep(0.5)
         print("The network scanning process is completed.")
     elif command == "HackNet.exe":
-        print("- HackNet.exe <ip>\nThis software will help you connect to closed server by it`s ip address.")
+        print("- HackNet.exe <ip>\nЭта программа поможет тебе подключится к закрытому серверу по его IP адресу.\nИспользуй команду 'cd ..' чтобы отключится.")
     elif command.startswith("HackNet.exe "):
         _, ip = command.split(" ", 1)
         current_directory = navigate(current_directory, "HackNet.exe")
