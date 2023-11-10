@@ -140,7 +140,8 @@ def removedFile(fileName):
     filenames = ["WhyPeoplesBad.db", "BeBad.cs", "DestroyThePlanet.cs",
                  "Kittens.db", "SavePeople.cs", "WhyPeoplesGood.db", "BeGood.cs",
                  "NetWorkBorderDataBase.db", "NetWorkBorder.cs",
-                 "THE_MAIN_SCRIPT.cs"]
+                 "THE_MAIN_SCRIPT.cs",
+                 "LL_server_script.py", "LL_data_base.db"]
 
     if fileName in filenames:
         send_message(f"RemovedFile: {fileName}")
@@ -247,9 +248,12 @@ while True:
         print(help_text)
     elif command.startswith("rm "):
         _, file = command.split(" ", 1)
-        removeAnimation(file)
-        current_directory.remove_file(file)
-        removedFile(file)
+        if file in [i.name for i in current_directory.subdirectories] or file in current_directory.files:
+            removeAnimation(file)
+            current_directory.remove_file(file)
+            removedFile(file)
+        else:
+            print(f"Файл \"{file}\" не найден.")
     elif command == "NetWorkScan.exe":
         print("\nThe network scanning process has started.\nIP addresses detected:")
         sleep(0.5)
