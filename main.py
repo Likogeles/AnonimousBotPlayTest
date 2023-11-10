@@ -1,5 +1,6 @@
 import random
 from time import sleep
+
 from websockets.sync.client import connect
 
 
@@ -145,7 +146,85 @@ def removedFile(fileName):
         send_message(f"RemovedFile: {fileName}")
 
 
-print("\n- Команда 'help' поможет тебе.\n")
+def mainConnectAnimation():
+    for i in range(42):
+        k = '|'
+        if i % 7 == 0:
+            k = '/'
+        elif i % 7 == 1:
+            k = '—'
+        elif i % 7 == 2:
+            k = '\\'
+        elif i % 7 == 3:
+            k = '|'
+        elif i % 7 == 4:
+            k = '/'
+        elif i % 7 == 5:
+            k = '—'
+        elif i % 7 == 6:
+            k = '\\'
+        print(f"\rУстановка соединения с удалённой машиной... [{k}]", end='\r')
+        sleep(0.1)
+    print(f"\rПодключение к удалённой машине завершено. [V]                                          ", end='\r')
+
+
+def connectAnimation():
+    for i in range(42):
+        k = '|'
+        if i % 7 == 0:
+            k = '/'
+        elif i % 7 == 1:
+            k = '—'
+        elif i % 7 == 2:
+            k = '\\'
+        elif i % 7 == 3:
+            k = '|'
+        elif i % 7 == 4:
+            k = '/'
+        elif i % 7 == 5:
+            k = '—'
+        elif i % 7 == 6:
+            k = '\\'
+        print(f"\rПодключение к серверу... [{k}]", end='\r')
+        sleep(0.1)
+    print(f"\rПодключение завершено. [V]  ", end='\r')
+
+
+def removeAnimation(fileName):
+    for i in range(42):
+        k = '|'
+        if i % 7 == 0:
+            k = '/'
+        elif i % 7 == 1:
+            k = '—'
+        elif i % 7 == 2:
+            k = '\\'
+        elif i % 7 == 3:
+            k = '|'
+        elif i % 7 == 4:
+            k = '/'
+        elif i % 7 == 5:
+            k = '—'
+        elif i % 7 == 6:
+            k = '\\'
+        print(f"\rУдаление файла \"{fileName}\"... [{k}]", end='\r')
+        sleep(0.1)
+    print(f"\rФайл \"{fileName}\" удалён. [V]                                                                                          ", end='\r')
+
+
+print("Обновление ПО...")
+
+sleep(0.5)
+for i in range(51):
+    bar = "[" + "=" * i + ">" + " " * (49-i) + "] - " + str(i * 2) + "%"
+    print(f"\r{bar}", end='\r')
+    sleep(random.randint(1, 5) / 20)
+
+print("\nОбновление завершено.")
+sleep(0.5)
+mainConnectAnimation()
+sleep(0.5)
+print("\n- Команда 'help' поможет тебе.")
 
 current_directory = root_directory
 while True:
@@ -168,10 +247,11 @@ while True:
         print(help_text)
     elif command.startswith("rm "):
         _, file = command.split(" ", 1)
+        removeAnimation(file)
         current_directory.remove_file(file)
         removedFile(file)
     elif command == "NetWorkScan.exe":
-        print("The network scanning process has started.\nIP addresses detected:")
+        print("\nThe network scanning process has started.\nIP addresses detected:")
         sleep(0.5)
         for i in ips.keys():
             print(f"- {i} - {ips[i]}")
@@ -181,6 +261,7 @@ while True:
         print("- HackNet.exe <ip>\nЭта программа поможет тебе подключится к закрытому серверу по его IP адресу.\nИспользуй команду 'cd ..' чтобы отключится.")
     elif command.startswith("HackNet.exe "):
         _, ip = command.split(" ", 1)
+        connectAnimation()
         current_directory = navigate(current_directory, "HackNet.exe")
         current_directory = navigate(current_directory, ip)
     elif command == "Legends_League.exe":
