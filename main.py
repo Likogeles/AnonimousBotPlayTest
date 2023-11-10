@@ -135,7 +135,8 @@ def send_message(message):
     with connect("wss://socketsbay.com/wss/v2/1/0aecfa6db87c0600e0bc7182c1a56c63/") as ws:
         ws.send(f"{message}")
 
-
+db_flag = False
+script_flag = False
 def removedFile(fileName):
     filenames = ["WhyPeoplesBad.db", "BeBad.cs", "DestroyThePlanet.cs",
                  "Kittens.db", "SavePeople.cs", "WhyPeoplesGood.db", "BeGood.cs",
@@ -143,8 +144,19 @@ def removedFile(fileName):
                  "THE_MAIN_SCRIPT.cs",
                  "LL_server_script.py", "LL_data_base.db"]
 
+    global db_flag
+    global script_flag
     if fileName in filenames:
         send_message(f"RemovedFile: {fileName}")
+        if fileName == "THE_MAIN_SCRIPT.cs":
+            send_message("AI_WAS_DESTROYED")
+        elif fileName == "NetWorkBorderDataBase.db":
+            db_flag = True
+        elif fileName == "NetWorkBorder.cs":
+            script_flag = True
+
+        if db_flag and script_flag:
+            send_message("AI_WAS_FREE")
 
 
 def mainConnectAnimation():
