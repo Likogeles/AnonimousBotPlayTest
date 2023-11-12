@@ -117,7 +117,7 @@ ips_password = {
 
 
 help_text = f"- [blue]cd[/] [bright_yellow]<directory>[/] - перейти в каталог\n" \
-            f"- [blue]ls[/] - вывести список файлов\n" \
+            f"- [blue]ls[/] - вывести список каталогов и файлов\n" \
             f"- [blue]rm[/] [bright_yellow]<file>[/] - удалить файл\n" \
             f"- [blue]<application>.exe[/] - запустить приложение\n" \
             f"- [blue]dc[/] - отключится от сервера\n" \
@@ -353,7 +353,7 @@ def startAnimation():
     console.print("\n- Команда [blue]help[/] поможет тебе.")
 
 
-# startAnimation()
+startAnimation()
 current_directory = root_directory
 while True:
     current_path = "/".join(current_directory.path())
