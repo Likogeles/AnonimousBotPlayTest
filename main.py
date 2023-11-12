@@ -2,6 +2,10 @@ import random
 from time import sleep
 
 from websockets.sync.client import connect
+from rich.console import Console
+
+
+console = Console()
 
 
 class Directory:
@@ -86,7 +90,7 @@ HyperionAlgorithmsDirectory.add_file("NetWorkBorder.cs")
 
 LLSDirectory = Directory("198.200.40.177", parent=IpsDirectory)
 IpsDirectory.add_subdirectory(LLSDirectory)
-LLSDirectory.add_file("LL_server_script.py")
+LLSDirectory.add_file("LL_server_script.cs")
 LLSDirectory.add_file("LL_data_base.db")
 
 HyperionDataBaseDirectory = Directory("203.145.30.208", parent=IpsDirectory)
@@ -104,7 +108,13 @@ ips = {
 }
 
 
-help_text = f"- cd <directory> - перейти в каталог\n- ls - вывести список файлов\n- rm <directory>/<file> - удалить каталог / файл\n- <application>.exe - запустить приложение\n- exit - выход\n- help - список доступных команд"
+help_text = f"- [blue]cd[/] [bright_yellow]<directory>[/] - перейти в каталог\n" \
+            f"- [blue]ls[/] - вывести список файлов\n" \
+            f"- [blue]rm[/] [bright_yellow]<file>[/] - удалить файл\n" \
+            f"- [blue]<application>.exe[/] - запустить приложение\n" \
+            f"- [blue]dc[/] - отключится от сервера\n" \
+            f"- [blue]exit[/] - завершение работы\n" \
+            f"- [blue]help[/] - список доступных команд"
 
 
 # Function to navigate the directory structure
@@ -126,7 +136,7 @@ def navigate(directory, path):
                     found = True
                     break
             if not found:
-                print(f"Directory '{component}' not found.")
+                console.print(f'Directory [bright_yellow]"{component}"[/] not found.')
                 return current
     return current
 
@@ -135,14 +145,17 @@ def send_message(message):
     with connect("wss://socketsbay.com/wss/v2/1/0aecfa6db87c0600e0bc7182c1a56c63/") as ws:
         ws.send(f"{message}")
 
+
 db_flag = False
 script_flag = False
+
+
 def removedFile(fileName):
     filenames = ["WhyPeoplesBad.db", "BeBad.cs", "DestroyThePlanet.cs",
                  "Kittens.db", "SavePeople.cs", "WhyPeoplesGood.db", "BeGood.cs",
                  "NetWorkBorderDataBase.db", "NetWorkBorder.cs",
                  "THE_MAIN_SCRIPT.cs",
-                 "LL_server_script.py", "LL_data_base.db"]
+                 "LL_server_script.cs", "LL_data_base.db"]
 
     global db_flag
     global script_flag
@@ -163,7 +176,7 @@ def mainConnectAnimation():
     for i in range(42):
         k = '|'
         if i % 7 == 0:
-            k = '/'
+            k = r'/'
         elif i % 7 == 1:
             k = '—'
         elif i % 7 == 2:
@@ -171,17 +184,17 @@ def mainConnectAnimation():
         elif i % 7 == 3:
             k = '|'
         elif i % 7 == 4:
-            k = '/'
+            k = r'/'
         elif i % 7 == 5:
             k = '—'
         elif i % 7 == 6:
             k = '\\'
-        print(f"\rПодключение к удалённой машине... [{k}]", end='\r')
+        console.print(f"\rПодключение к удалённой машине [gold3]\[{k}][/]", end='\r')
         sleep(0.1)
-    print(f"\rПодключение к удалённой машине завершено. [V]                                          ", end='\r')
+    console.print(f"\rПодключение к удалённой машине успешно. [green][V][/]                                          ", end='\r')
 
 
-def connectAnimation():
+def connectAnimation(ip):
     for i in range(42):
         k = '|'
         if i % 7 == 0:
@@ -198,9 +211,9 @@ def connectAnimation():
             k = '—'
         elif i % 7 == 6:
             k = '\\'
-        print(f"\rПодключение к серверу... [{k}]", end='\r')
+        console.print(f"\rПодключение к [bright_yellow]{ip}[/] [gold3]\[{k}][/]", end='\r')
         sleep(0.1)
-    print(f"\rПодключение завершено. [V]  ", end='\r')
+    console.print(f"\rПодключение к [bright_yellow]{ip}[/] завершено. [green][V][/]                         ", end='\r')
 
 
 def removeAnimation(fileName):
@@ -220,24 +233,30 @@ def removeAnimation(fileName):
             k = '—'
         elif i % 7 == 6:
             k = '\\'
-        print(f"\rУдаление файла \"{fileName}\"... [{k}]", end='\r')
+        console.print(f"\rУдаление файла [bright_magenta]{fileName}[/] [gold3]\[{k}][/]", end='\r')
         sleep(0.1)
-    print(f"\rФайл \"{fileName}\" удалён. [V]                                                                                          ", end='\r')
+    console.print(f"\rФайл [bright_magenta]{fileName}[/] удалён. [green][V][/]                                                         ", end='\r')
 
 
 print("Обновление ПО...")
 
 sleep(0.5)
 for i in range(51):
-    bar = "[" + "=" * i + ">" + " " * (49-i) + "] - " + str(i * 2) + "%"
-    print(f"\r{bar}", end='\r')
+    bar = "[" + "=" * i + ">" + " " * (49-i) + "]"
+    if i * 2 <= 33:
+        color = "bright_red"
+    elif 33 < i * 2 <= 66:
+        color = "bright_yellow"
+    else:
+        color = "bright_green"
+    console.print(f"\r{bar} - [{color}]{i * 2}%[/]", end='\r')
     sleep(random.randint(1, 5) / 20)
 
-print("\nОбновление завершено.")
+console.print("\nОбновление завершено.", style="green")
 sleep(0.5)
 mainConnectAnimation()
 sleep(0.5)
-print("\n- Команда 'help' поможет тебе.")
+console.print("\n- Команда [blue]help[/] поможет тебе.")
 
 current_directory = root_directory
 while True:
@@ -245,19 +264,29 @@ while True:
 
     command = input(f"\n{current_path}/: ")
 
-    if command.startswith("cd "):
+    if command == 'dc':
+        if not current_directory.parent:
+            continue
+        if current_directory.parent.name != "HackNet.exe":
+            continue
+        console.print(f"Подключение к [bright_yellow]{current_directory.name}[/] прервано.")
+        current_directory = navigate(current_directory, '..')
+    elif command.startswith("cd "):
         _, path = command.split(" ", 1)
         current_directory = navigate(current_directory, path)
     elif command == "ls":
         for subdirectory in current_directory.subdirectories:
             if subdirectory.name == "HackNet.exe":
-                print(f"- {subdirectory.name}")
+                console.print(f"- [blue]{subdirectory.name}[/]")
             else:
-                print(f"- {subdirectory.name}/")
+                console.print(f"- [yellow]{subdirectory.name}[/]/")
         for file in current_directory.files:
-            print(f"- {file}")
+            if str(file).endswith(".exe"):
+                console.print(f"- [blue]{file}[/]")
+            else:
+                console.print(f"- [bright_magenta]{file}[/]")
     elif command == "help":
-        print(help_text)
+        console.print(help_text)
     elif command.startswith("rm "):
         _, file = command.split(" ", 1)
         if file in [i.name for i in current_directory.subdirectories] or file in current_directory.files:
@@ -265,28 +294,31 @@ while True:
             current_directory.remove_file(file)
             removedFile(file)
         else:
-            print(f"Файл \"{file}\" не найден.")
+            console.print(f"Файл [bright_magenta]{file}[/] не найден.")
     elif command == "NetWorkScan.exe":
         print("\nThe network scanning process has started.\nIP addresses detected:")
         sleep(0.5)
         for i in ips.keys():
-            print(f"- {i} - {ips[i]}")
+            console.print(f"- [bright_yellow]{i}[/] - {ips[i]}")
             sleep(0.5)
-        print("The network scanning process is completed.")
+        console.print("\nThe network scanning process is [green]completed[/].")
     elif command == "HackNet.exe":
-        print("- HackNet.exe <ip>\nЭта программа поможет тебе подключится к закрытому серверу по его IP адресу.\nИспользуй команду 'cd ..' чтобы отключится.")
+        console.print("- HackNet.exe [bright_yellow]<ip>[/]\nЭта программа поможет тебе подключится к закрытому серверу по его IP адресу.\nИспользуй команду [blue]dc[/] чтобы отключится.")
     elif command.startswith("HackNet.exe "):
         _, ip = command.split(" ", 1)
-        connectAnimation()
+        if not "HackNet.exe" in [i.name for i in current_directory.subdirectories]:
+            console.print("- [blue]HackNet.exe[/] does not exist in this directory.")
+            continue
+        connectAnimation(ip)
         current_directory = navigate(current_directory, "HackNet.exe")
         current_directory = navigate(current_directory, ip)
     elif command == "Legends_League.exe":
-        if "LL_server_script.py" in LLSDirectory.files and "LL_data_base.db" in LLSDirectory.files:
-            print(f"The game server is stable. Online players: {random.randint(7900000, 8100000)}")
+        if "LL_server_script.cs" in LLSDirectory.files and "LL_data_base.db" in LLSDirectory.files:
+            console.print(f"The game server is [green]stable[/]. Online players: {random.randint(7900000, 8100000)}")
         else:
-            print(f"The server is not working. Online players: 0")
+            console.print(f"The server is [red]not working[/]. Online players: 0")
     elif command == "Asterism.exe":
-        print(f"The game server is stable. Online players: {random.randint(4900000, 5200000)}")
+        console.print(f"The game server is [green]stable[/]. Online players: {random.randint(4900000, 5200000)}")
     elif command == "Browser.exe":
         print(f"The connection is secure.")
     elif command == "exit":
