@@ -76,7 +76,7 @@ hacks_directory.add_subdirectory(IpsDirectory)
 
 UlSTUDirectory = Directory("172.120.85.124", parent=IpsDirectory)
 IpsDirectory.add_subdirectory(UlSTUDirectory)
-UlSTUDirectory.add_file("RunServer.cs")
+UlSTUDirectory.add_file("Server_script.cs")
 UlSTUDirectory.add_file("RandomDropServer.cs")
 
 HyperionAlgorithmsDirectory = Directory("176.33.15.42", parent=IpsDirectory)
@@ -166,7 +166,8 @@ def removedFile(fileName):
                  "Kittens.db", "SavePeople.cs", "WhyPeoplesGood.db", "BeGood.cs",
                  "NetWorkBorderDataBase.db", "NetWorkBorder.cs",
                  "THE_MAIN_SCRIPT.cs",
-                 "LL_server_script.cs", "LL_data_base.db"]
+                 "LL_server_script.cs", "LL_data_base.db",
+                 "Server_script.cs", "RandomDropServer.cs"]
 
     global db_flag
     global script_flag
