@@ -224,6 +224,87 @@ def connectAnimation(ip):
     console.print(f"\rПодключение к [bright_yellow]{ip}[/] завершено. [green][V][/]                         ", end='\r')
 
 
+letters = ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф',
+           'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я', 'а', 'б', 'в', 'г', 'д', 'е', 'ж', 'з', 'и', 'й',
+           'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю',
+           'я', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+           'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
+           'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+           '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '+', '=', '[', ']', '{', '}', '|', ':', ';',
+           '<', '>', ',', '.', '?', '`', '~']
+
+
+def passwordHackAnimation(ip):
+    for i in range(42):
+        k = '|'
+        if i % 7 == 0:
+            k = '/'
+        elif i % 7 == 1:
+            k = '—'
+        elif i % 7 == 2:
+            k = '\\'
+        elif i % 7 == 3:
+            k = '|'
+        elif i % 7 == 4:
+            k = '/'
+        elif i % 7 == 5:
+            k = '—'
+        elif i % 7 == 6:
+            k = '\\'
+        console.print(f"\rПсевдоподключение к [bright_yellow]{ip}[/] [gold3]\[{k}][/]", end='\r')
+        sleep(0.1)
+    if not ip in ips.keys():
+        console.print(f"- Сервера с IP [bright_yellow]{ip}[/] не существует. [red][X][/]                              ")
+        return
+    console.print(f"\rПсевдоподключение к [bright_yellow]{ip}[/] завершено. [green][V][/]                         ")
+
+    for i in range(14):
+        k = '|'
+        if i % 7 == 0:
+            k = '/'
+        elif i % 7 == 1:
+            k = '—'
+        elif i % 7 == 2:
+            k = '\\'
+        elif i % 7 == 3:
+            k = '|'
+        elif i % 7 == 4:
+            k = '/'
+        elif i % 7 == 5:
+            k = '—'
+        elif i % 7 == 6:
+            k = '\\'
+        console.print(f"\rПодключение к базе данных [bright_yellow]{ip}[/] [gold3]\[{k}][/]", end='\r')
+        sleep(0.1)
+    console.print(f"\rПодключение к базе данных [bright_yellow]{ip}[/] завершено. [green][V][/]                       ")
+
+    password_str = []
+    correct_password = ips_password[ip]
+    correct_id = []
+    correct_letters_id = []
+    for i in range(len(correct_password)):
+        password_str.append(random.choice(letters))
+        correct_id.append(i)
+
+    for i in range(len(password_str) * 55):
+        if i % 25 == 0:
+            correct_letters_id.append(random.choice(correct_id))
+        new_text = ""
+        for i in range(len(password_str)):
+            if i not in correct_letters_id:
+                password_str[i] = random.choice(letters)
+                new_text += f"[bright_yellow]{password_str[i]}[/]"
+            else:
+                password_str[i] = correct_password[i]
+                new_text += f"[bright_cyan]{password_str[i]}[/]"
+
+        console.print(f"\rРасшифровка Хэша: {new_text}", end='\r')
+        sleep(0.01)
+    console.print(f"\rХэш расшифрован [green][V][/]                                                                   ")
+
+    console.print(f"Пароль [bright_yellow]{ip}[/]: [bright_cyan]{ips_password[ip]}[/]")
+
+
 def removeAnimation(fileName):
     for i in range(42):
         k = '|'
@@ -274,85 +355,97 @@ while True:
     current_path = "/".join(current_directory.path())
 
     command = input(f"\n{current_path}/: ")
-
-    if command == 'dc':
-        if not current_directory.parent:
-            continue
-        if current_directory.parent.name != "RemoteAccess.exe":
-            continue
-        console.print(f"Подключение к [bright_yellow]{current_directory.name}[/] прервано.")
-        current_directory = navigate(current_directory, '..')
-    elif command.startswith("cd "):
-        _, path = command.split(" ", 1)
-        current_directory = navigate(current_directory, path)
-    elif command == "ls":
-        for subdirectory in current_directory.subdirectories:
-            if subdirectory.name == "RemoteAccess.exe":
-                console.print(f"- [blue]{subdirectory.name}[/]")
+    try:
+        if command == 'dc':
+            if not current_directory.parent:
+                continue
+            if current_directory.parent.name != "RemoteAccess.exe":
+                continue
+            console.print(f"Подключение к [bright_yellow]{current_directory.name}[/] прервано.")
+            current_directory = navigate(current_directory, '..')
+        elif command.startswith("cd "):
+            _, path = command.split(" ", 1)
+            current_directory = navigate(current_directory, path)
+        elif command == "ls":
+            for subdirectory in current_directory.subdirectories:
+                if subdirectory.name == "RemoteAccess.exe":
+                    console.print(f"- [blue]{subdirectory.name}[/]")
+                else:
+                    console.print(f"- [yellow]{subdirectory.name}[/]/")
+            for file in current_directory.files:
+                if str(file).endswith(".exe"):
+                    console.print(f"- [blue]{file}[/]")
+                else:
+                    console.print(f"- [bright_magenta]{file}[/]")
+        elif command == "help":
+            console.print(help_text)
+        elif command.startswith("rm "):
+            _, file = command.split(" ", 1)
+            if file in [i.name for i in current_directory.subdirectories] or file in current_directory.files:
+                removeAnimation(file)
+                current_directory.remove_file(file)
+                removedFile(file)
             else:
-                console.print(f"- [yellow]{subdirectory.name}[/]/")
-        for file in current_directory.files:
-            if str(file).endswith(".exe"):
-                console.print(f"- [blue]{file}[/]")
-            else:
-                console.print(f"- [bright_magenta]{file}[/]")
-    elif command == "help":
-        console.print(help_text)
-    elif command.startswith("rm "):
-        _, file = command.split(" ", 1)
-        if file in [i.name for i in current_directory.subdirectories] or file in current_directory.files:
-            removeAnimation(file)
-            current_directory.remove_file(file)
-            removedFile(file)
-        else:
-            console.print(f"Файл [bright_magenta]{file}[/] не найден.")
-    elif command == "NetWorkScan.exe":
-        print("\nThe network scanning process has started.\nIP addresses detected:")
-        sleep(0.5)
-        for i in ips.keys():
-            console.print(f"- [bright_yellow]{i}[/] - {ips[i]}")
+                console.print(f"Файл [bright_magenta]{file}[/] не найден.")
+        elif command == "NetWorkScan.exe":
+            print("\nThe network scanning process has started.\nIP addresses detected:")
             sleep(0.5)
-        console.print("\nThe network scanning process is [green]completed[/].")
-    elif command == "RemoteAccess.exe":
-        console.print("- [blue]RemoteAccess.exe[/] [bright_yellow]<ip>[/] [bright_cyan]<password>[/]\n"
-                      "Эта программа поможет тебе подключится к закрытому серверу по его "
-                      "[bright_yellow]IP адресу[/] и [bright_cyan]паролю[/].\n"
-                      "Используй команду [blue]dc[/] чтобы отключится.")
-    elif command.startswith("RemoteAccess.exe "):
-        if len(command.split(" ")) < 3:
-            console.print("- [blue]RemoteAccess.exe[/] need more arguments.")
-            continue
-        _, ip, password = command.split(" ", 2)
-        if not "RemoteAccess.exe" in [i.name for i in current_directory.subdirectories]:
-            console.print("- [blue]RemoteAccess.exe[/] does not exist in this directory.")
-            continue
-        connectAnimation(ip)
-        current_directory = navigate(current_directory, "RemoteAccess.exe")
-        if not ip in [i.name for i in current_directory.subdirectories]:
-            current_directory = navigate(current_directory, "..")
-            console.print(f"- Сервера с IP [bright_yellow]{ip}[/] не существует. [red][X][/]                              ")
-            continue
-        elif password not in ips_password[ip]:
-            current_directory = navigate(current_directory, "..")
-            console.print(f"- Сервер [bright_yellow]{ip}[/] отверг запрос на подключение: Incorrect password. [red][X][/]")
-            continue
-        elif password != ips_password[ip]:
-            current_directory = navigate(current_directory, "..")
-            console.print(f"- Сервер [bright_yellow]{ip}[/] отверг запрос на подключение: Incorrect password. [red][X][/]")
-            continue
-        print()
-        current_directory = navigate(current_directory, ip)
-    elif command == "Legends_League.exe":
-        if "LL_server_script.cs" in LLSDirectory.files and "LL_data_base.db" in LLSDirectory.files:
-            console.print(f"The game server is [green]stable[/]. Online players: {random.randint(7900000, 8100000)}")
+            for i in ips.keys():
+                console.print(f"- [bright_yellow]{i}[/] - {ips[i]}")
+                sleep(0.5)
+            console.print("\nThe network scanning process is [green]completed[/].")
+        elif command == "RemoteAccess.exe":
+            console.print("- [blue]RemoteAccess.exe[/] [bright_yellow]<ip>[/] [bright_cyan]<password>[/]\n"
+                          "Эта программа поможет тебе подключится к закрытому серверу по его "
+                          "[bright_yellow]IP адресу[/] и [bright_cyan]паролю[/].\n"
+                          "Используй команду [blue]dc[/] чтобы отключится.")
+        elif command.startswith("RemoteAccess.exe "):
+            if len(command.split(" ")) < 3:
+                console.print("- [blue]RemoteAccess.exe[/] need more arguments.")
+                continue
+            _, ip, password = command.split(" ", 2)
+            if not "RemoteAccess.exe" in [i.name for i in current_directory.subdirectories]:
+                console.print("- [blue]RemoteAccess.exe[/] does not exist in this directory.")
+                continue
+            connectAnimation(ip)
+            current_directory = navigate(current_directory, "RemoteAccess.exe")
+            if not ip in [i.name for i in current_directory.subdirectories]:
+                current_directory = navigate(current_directory, "..")
+                console.print(f"- Сервера с IP [bright_yellow]{ip}[/] не существует. [red][X][/]                              ")
+                continue
+            elif password not in ips_password[ip]:
+                current_directory = navigate(current_directory, "..")
+                console.print(f"- Сервер [bright_yellow]{ip}[/] отверг запрос на подключение: Incorrect password. [red][X][/]")
+                continue
+            elif password != ips_password[ip]:
+                current_directory = navigate(current_directory, "..")
+                console.print(f"- Сервер [bright_yellow]{ip}[/] отверг запрос на подключение: Incorrect password. [red][X][/]")
+                continue
+            print()
+            current_directory = navigate(current_directory, ip)
+        elif command == "HackNet.exe":
+            console.print("- [blue]HackNet.exe[/] [bright_yellow]<ip>[/]\n"
+                          "Эта программа поможет тебе получить пароль сервера по его "
+                          "[bright_yellow]IP адресу[/].")
+        elif command.startswith("HackNet.exe "):
+            if len(command.split(" ")) < 2:
+                console.print("- [blue]HackNet.exe[/] need more arguments.")
+                continue
+            _, ip = command.split(" ", 1)
+            passwordHackAnimation(ip)
+        elif command == "Legends_League.exe":
+            if "LL_server_script.cs" in LLSDirectory.files and "LL_data_base.db" in LLSDirectory.files:
+                console.print(f"The game server is [green]stable[/]. Online players: {random.randint(7900000, 8100000)}")
+            else:
+                console.print(f"The server is [red]not working[/]. Online players: 0")
+        elif command == "Asterism.exe":
+            console.print(f"The game server is [green]stable[/]. Online players: {random.randint(4900000, 5200000)}")
+        elif command == "Browser.exe":
+            print(f"The connection is secure.")
+        elif command == "exit":
+            break
         else:
-            console.print(f"The server is [red]not working[/]. Online players: 0")
-    elif command == "Asterism.exe":
-        console.print(f"The game server is [green]stable[/]. Online players: {random.randint(4900000, 5200000)}")
-    elif command == "Browser.exe":
-        print(f"The connection is secure.")
-    elif command == "exit":
-        break
-    else:
-        print("Invalid command. Try again.")
-    sleep(0.5)
+            print("Invalid command. Try again.")
+        sleep(0.5)
+    except Exception as ex:
+        print(f"Unknown Error: {ex}.\nTry again.")
