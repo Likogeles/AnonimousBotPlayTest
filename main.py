@@ -126,14 +126,17 @@ help_text = f"- [blue]cd[/] [bright_yellow]<directory>[/] - перейти в к
 
 
 # Function to navigate the directory structure
-def navigate(directory, path):
+def navigate(directory, path, is_dc=False):
     components = path.split("/")
     current = directory
     for component in components:
         if component == "..":
             if current.parent is not None:
                 if current.parent.name == "RemoteAccess.exe":
-                    current = current.parent.parent
+                    if is_dc:
+                        current = current.parent.parent
+                    else:
+                        pass
                 else:
                     current = current.parent
         else:
@@ -362,7 +365,7 @@ while True:
             if current_directory.parent.name != "RemoteAccess.exe":
                 continue
             console.print(f"Подключение к [bright_yellow]{current_directory.name}[/] прервано.")
-            current_directory = navigate(current_directory, '..')
+            current_directory = navigate(current_directory, '..', is_dc=True)
         elif command.startswith("cd "):
             _, path = command.split(" ", 1)
             current_directory = navigate(current_directory, path)
