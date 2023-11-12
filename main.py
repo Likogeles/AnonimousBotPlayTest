@@ -68,10 +68,10 @@ apps_directory.add_file("Browser.exe")
 
 hacks_directory = Directory("SecretData", parent=apps_directory)
 apps_directory.add_subdirectory(hacks_directory)
-# hacks_directory.add_file("HackNet.exe")
 hacks_directory.add_file("NetWorkScan.exe")
+hacks_directory.add_file("HackNet.exe")
 
-IpsDirectory = Directory("HackNet.exe", parent=hacks_directory)
+IpsDirectory = Directory("RemoteAccess.exe", parent=hacks_directory)
 hacks_directory.add_subdirectory(IpsDirectory)
 
 UlSTUDirectory = Directory("172.120.85.124", parent=IpsDirectory)
@@ -108,6 +108,14 @@ ips = {
 }
 
 
+ips_password = {
+    "172.120.85.124": "LearnWith1234",
+    "176.33.15.42": "AdvancedLogic",
+    "198.200.40.177": "EpicBattles",
+    "203.145.30.208": "SacredKnowledge"
+}
+
+
 help_text = f"- [blue]cd[/] [bright_yellow]<directory>[/] - перейти в каталог\n" \
             f"- [blue]ls[/] - вывести список файлов\n" \
             f"- [blue]rm[/] [bright_yellow]<file>[/] - удалить файл\n" \
@@ -124,7 +132,7 @@ def navigate(directory, path):
     for component in components:
         if component == "..":
             if current.parent is not None:
-                if current.parent.name == "HackNet.exe":
+                if current.parent.name == "RemoteAccess.exe":
                     current = current.parent.parent
                 else:
                     current = current.parent
@@ -238,26 +246,29 @@ def removeAnimation(fileName):
     console.print(f"\rФайл [bright_magenta]{fileName}[/] удалён. [green][V][/]                                                         ", end='\r')
 
 
-print("Обновление ПО...")
+def startAnimation():
+    print("Обновление ПО...")
 
-sleep(0.5)
-for i in range(51):
-    bar = "[" + "=" * i + ">" + " " * (49-i) + "]"
-    if i * 2 <= 33:
-        color = "bright_red"
-    elif 33 < i * 2 <= 66:
-        color = "bright_yellow"
-    else:
-        color = "bright_green"
-    console.print(f"\r{bar} - [{color}]{i * 2}%[/]", end='\r')
-    sleep(random.randint(1, 5) / 20)
+    sleep(0.5)
+    for i in range(51):
+        bar = "[" + "=" * i + ">" + " " * (49-i) + "]"
+        if i * 2 <= 33:
+            color = "bright_red"
+        elif 33 < i * 2 <= 66:
+            color = "bright_yellow"
+        else:
+            color = "bright_green"
+        console.print(f"\r{bar} - [{color}]{i * 2}%[/]", end='\r')
+        sleep(random.randint(1, 5) / 20)
 
-console.print("\nОбновление завершено.", style="green")
-sleep(0.5)
-mainConnectAnimation()
-sleep(0.5)
-console.print("\n- Команда [blue]help[/] поможет тебе.")
+    console.print("\nОбновление завершено.", style="green")
+    sleep(0.5)
+    mainConnectAnimation()
+    sleep(0.5)
+    console.print("\n- Команда [blue]help[/] поможет тебе.")
 
+
+# startAnimation()
 current_directory = root_directory
 while True:
     current_path = "/".join(current_directory.path())
@@ -267,7 +278,7 @@ while True:
     if command == 'dc':
         if not current_directory.parent:
             continue
-        if current_directory.parent.name != "HackNet.exe":
+        if current_directory.parent.name != "RemoteAccess.exe":
             continue
         console.print(f"Подключение к [bright_yellow]{current_directory.name}[/] прервано.")
         current_directory = navigate(current_directory, '..')
@@ -276,7 +287,7 @@ while True:
         current_directory = navigate(current_directory, path)
     elif command == "ls":
         for subdirectory in current_directory.subdirectories:
-            if subdirectory.name == "HackNet.exe":
+            if subdirectory.name == "RemoteAccess.exe":
                 console.print(f"- [blue]{subdirectory.name}[/]")
             else:
                 console.print(f"- [yellow]{subdirectory.name}[/]/")
@@ -302,15 +313,34 @@ while True:
             console.print(f"- [bright_yellow]{i}[/] - {ips[i]}")
             sleep(0.5)
         console.print("\nThe network scanning process is [green]completed[/].")
-    elif command == "HackNet.exe":
-        console.print("- HackNet.exe [bright_yellow]<ip>[/]\nЭта программа поможет тебе подключится к закрытому серверу по его IP адресу.\nИспользуй команду [blue]dc[/] чтобы отключится.")
-    elif command.startswith("HackNet.exe "):
-        _, ip = command.split(" ", 1)
-        if not "HackNet.exe" in [i.name for i in current_directory.subdirectories]:
-            console.print("- [blue]HackNet.exe[/] does not exist in this directory.")
+    elif command == "RemoteAccess.exe":
+        console.print("- [blue]RemoteAccess.exe[/] [bright_yellow]<ip>[/] [bright_cyan]<password>[/]\n"
+                      "Эта программа поможет тебе подключится к закрытому серверу по его "
+                      "[bright_yellow]IP адресу[/] и [bright_cyan]паролю[/].\n"
+                      "Используй команду [blue]dc[/] чтобы отключится.")
+    elif command.startswith("RemoteAccess.exe "):
+        if len(command.split(" ")) < 3:
+            console.print("- [blue]RemoteAccess.exe[/] need more arguments.")
+            continue
+        _, ip, password = command.split(" ", 2)
+        if not "RemoteAccess.exe" in [i.name for i in current_directory.subdirectories]:
+            console.print("- [blue]RemoteAccess.exe[/] does not exist in this directory.")
             continue
         connectAnimation(ip)
-        current_directory = navigate(current_directory, "HackNet.exe")
+        current_directory = navigate(current_directory, "RemoteAccess.exe")
+        if not ip in [i.name for i in current_directory.subdirectories]:
+            current_directory = navigate(current_directory, "..")
+            console.print(f"- Сервера с IP [bright_yellow]{ip}[/] не существует. [red][X][/]                              ")
+            continue
+        elif password not in ips_password[ip]:
+            current_directory = navigate(current_directory, "..")
+            console.print(f"- Сервер [bright_yellow]{ip}[/] отверг запрос на подключение: Incorrect password. [red][X][/]")
+            continue
+        elif password != ips_password[ip]:
+            current_directory = navigate(current_directory, "..")
+            console.print(f"- Сервер [bright_yellow]{ip}[/] отверг запрос на подключение: Incorrect password. [red][X][/]")
+            continue
+        print()
         current_directory = navigate(current_directory, ip)
     elif command == "Legends_League.exe":
         if "LL_server_script.cs" in LLSDirectory.files and "LL_data_base.db" in LLSDirectory.files:
